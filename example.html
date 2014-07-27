@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A simple example of the TTreeList</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./treelist.js"></script>
+  </head>
+  <body>
+    <h2>Unsorted</h2>
+    <div id="unsorted"></div>
+    <h2>Sorted</h2>
+    <div id="sorted"></div>
+    <h2>Tree</h2>
+    <div id="tree"></div>
+    <h2>Navigate</h2>
+    <div id="navigate"></div>
+    <h2>Search</h2>
+    <div id="search"></div>
+    <script>
+      // Create a TreeList
+      var tree = new TTreeList();
+      // Add some data to the TreeList
+      tree.add({'id':1,'name':'E'});
+      tree.add({'id':2,'name':'D'});
+      tree.add({'id':3,'name':'F'});
+      tree.add({'id':4,'name':'B'});
+      tree.add({'id':5,'name':'G'});
+      tree.add({'id':6,'name':'C'});
+      tree.add({'id':7,'name':'A'});
+      // Add one node with a value that already exists
+      tree.add({'id':8,'name':'G'});
+      
+      // Just loop through the nodes in the TreeList
+      var s = '';
+      for(var i = 0; i < tree.nodes.length; i++) {
+        s += 'Name : ';
+        s += tree.nodes[i]['name'];
+        s += ' with the id : ';
+        s += tree.nodes[i]['id'];
+        s += '<br />';
+      }
+      document.getElementById('unsorted').innerHTML = s;
+      
+      // Build a TreeList
+      var root = tree.build('name');
+      
+      // Loop through the linked list of the TreeList
+      s = '';
+      var node = tree.first;
+      while(node !== null) {
+        s += node.get('name');
+        s += ' (';
+        s += node.getPayloadCount();
+        s += ')<br />';
+        node = node.next;
+      }
+      document.getElementById('sorted').innerHTML = s;
+      
+      // Get the tree content of the TreeList
+      s = '';
+      s += 'Root = '+root.get('name')+'<br />';
+      s += 'Left = '+root.left.get('name')+'<br />';
+      s += 'Left Left = '+root.left.left.get('name')+'<br />';
+      s += 'Left Right = '+root.left.right.get('name')+'<br />';
+      s += 'Right = '+root.right.get('name')+'<br />';
+      s += 'Right Left = '+root.right.left.get('name')+'<br />';
+      s += 'Right Right = '+root.right.right.get('name')+'<br />';
+      document.getElementById('tree').innerHTML = s;
+      
+      // Navigate around in the TreeList using both the hierarchial tree
+      // and the double linked list
+      s = '';
+      var node = tree.root;
+      s += 'Start at root of the tree ('+node.get('name')+')<br />';
+      node = node.left;
+      s += 'Go to the left node of the tree ('+node.get('name')+')<br />';
+      node = node.next;
+      s += 'Go to the next node in the list ('+node.get('name')+')<br />';
+      node = node.next;
+      s += 'Go to the next node in the list ('+node.get('name')+')<br />';
+      node = node.next;
+      s += 'Go to the next node in the list ('+node.get('name')+')<br />';
+      node = node.parent;
+      s += 'Go to the parent node in the tree ('+node.get('name')+')<br />';
+      node = node.parent;
+      s += 'Go to the parent node in the tree ('+node.get('name')+')<br />';
+      s += 'You should now be back att the root node.<br />';
+      document.getElementById('navigate').innerHTML = s;
+      
+      // Search for some values
+      s = '';
+      var node = tree.search('A');
+      if(node !== null) {
+        s += 'A found with id:'+node.get('id')+'<br />';
+      } else {
+        s += 'A wasn\'t found<br />';
+      }
+      var node = tree.search('D');
+      if(node !== null) {
+        s += 'D found with id:'+node.get('id')+'<br />';
+      } else {
+        s += 'D wasn\'t found<br />';
+      }
+      var node = tree.search('F');
+      if(node !== null) {
+        s += 'F found with id:'+node.get('id')+'<br />';
+      } else {
+        s += 'F wasn\'t found<br />';
+      }
+      var node = tree.search('H');
+      if(node !== null) {
+        s += 'H found with id:'+node.get('id')+'<br />';
+      } else {
+        s += 'H wasn\'t found<br />';
+      }
+      document.getElementById('search').innerHTML = s;
+    </script>
+  </body>
+</html>
